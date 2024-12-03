@@ -18,5 +18,10 @@ export default [
         path: '/client-products/',
         name: 'ClientProducts',
         component: () => import('../components/product/ClientProductPage.vue')
+    },
+    {
+        path: '/product-ingredient/:id?',
+        name: 'IngredientsByProduct',
+        component: () => import('../components/product/IngredientsByProduct.vue')
     }
 ];

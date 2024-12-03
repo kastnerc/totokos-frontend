@@ -2,8 +2,9 @@
   <main>
     <h1>Order List</h1>
     <div>
-      <input v-model="searchQuery" placeholder="Search by Order ID" />
-      <button @click="searchById">Search</button>
+      <input v-model="searchQuery" placeholder="Search by Order ID or User ID" />
+      <button @click="searchByOrderId">Search by Order ID</button>
+      <button @click="searchByUserId">Search by User ID</button>
       <button @click="resetSearch">Reset</button>
     </div>
     <table class="table table-striped">
@@ -20,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="order in paginatedOrders" :key="order.id_order">
+        <tr v-for="order in orders" :key="order.id_order">
           <td>{{ order.id_order }}</td>
           <td>{{ order.id_user }}</td>
           <td>{{ order.order_date }}</td>
@@ -45,19 +46,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const orders = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(0);
 const pageSize = 10;
 const searchQuery = ref("");
-const searchResult = ref(null);
 const router = useRouter();
+const route = useRoute();
 
-const getOrders = (page = 1) => {
+const getOrders = async (page = 1) => {
   axios.get(`http://localhost:5000/api/order/?page=${page}&limit=${pageSize}`)
     .then(res => {
       orders.value = res.data.data;
@@ -67,25 +68,29 @@ const getOrders = (page = 1) => {
     .catch(error => console.error("Error fetching orders:", error));
 };
 
-const goToUpdateForm = (id) => {
-  router.push({ name: "OrderForm", params: { id } });
-  console.log('Redirecting to update form for order:', id); // Placeholder
+const searchByOrderId = async () => {
+  if (searchQuery.value) {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/order/${searchQuery.value}`);
+      orders.value = response.data ? [response.data] : [];
+      totalPages.value = 1;
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      alert("Order not found or error occurred.");
+      resetSearch();
+    }
+  }
 };
 
-const searchById = async () => {
+const searchByUserId = async () => {
   if (searchQuery.value) {
-    const id = parseInt(searchQuery.value, 10);
-    if (!isNaN(id)) {
-      const result = await axios.get(`http://localhost:5000/api/order/${id}`);
-      if (result.data) {
-        orders.value = [result.data]; // Display only the searched order
-        totalPages.value = 1; // Reset total pages as we are showing one result
-      } else {
-        alert("Order not found");
-        resetSearch();
-      }
-    } else {
-      alert("Please enter a valid number");
+    try {
+      const response = await axios.get(`http://localhost:5000/api/user/${searchQuery.value}/orders`);
+      orders.value = response.data.data.length > 0 ? response.data.data : [];
+      totalPages.value = Math.ceil(response.data.data.length / pageSize);
+    } catch (error) {
+      alert("User not found or no orders for this user.");
+      resetSearch();
     }
   }
 };
@@ -103,26 +108,32 @@ const deleteOrder = (id) => {
     .catch(error => console.error("Error deleting order:", error));
 };
 
-const paginatedOrders = computed(() => orders.value);
-
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    getOrders(currentPage.value - 1);
-  }
+const goToUpdateForm = (id) => {
+  router.push({ name: "OrderForm", params: { id } });
 };
 
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    getOrders(currentPage.value + 1);
+// Load initial data or perform search based on URL parameters
+onMounted(() => {
+  const userIdFromUrl = route.query.userId;
+  if (userIdFromUrl) {
+    searchQuery.value = userIdFromUrl;  // Set the user ID into the search bar
+    searchByUserId();  // Trigger the search function
+  } else {
+    getOrders(currentPage.value);  // Load the initial set of orders if no user ID is specified
   }
-};
-
-onBeforeMount(() => {
-  getOrders(currentPage.value);
 });
 </script>
 
 
 <style scoped>
-/* Add your styles here */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+}
 </style>

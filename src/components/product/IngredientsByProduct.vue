@@ -59,9 +59,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useRoute } from 'vue-router';
 import axios from "axios";
 
+const route = useRoute();
 const productIdQuery = ref("");
 const ingredientProducts = ref([]);
 const newLink = ref({ id_ingredient: "", quantity: "" });
@@ -69,84 +71,89 @@ const isEditing = ref(false);
 const editingLink = ref({ id_ingredient: "", quantity: "" });
 
 const fetchIngredientsByProductId = async () => {
+  if (!productIdQuery.value) return; // Ensure there is a product ID to fetch
   try {
-    const response = await axios.get(
-      `http://localhost:5000/api/product/${productIdQuery.value}/ingredients`
-    );
-
-    // Expecting the backend to return both `id_ingredient` and `quantity`
-    ingredientProducts.value = response.data.data.map((link) => ({
-      id_ingredient: link.id_ingredient,
-      quantity: link.Ingredient_Product?.quantity || 0, // Extract quantity from Ingredient_Product
+    const response = await axios.get(`http://localhost:5000/api/product/${productIdQuery.value}/ingredients`);
+    ingredientProducts.value = response.data.data.map((item) => ({
+      id_ingredient: item.id_ingredient,
+      quantity: item.Ingredient_Product.quantity  // Assuming that the backend sends this nested structure
     }));
   } catch (error) {
     console.error("Error fetching ingredients:", error);
+    alert(`Error fetching ingredients: ${error.response?.data.message || error.message}`);
     ingredientProducts.value = [];
   }
 };
 
+// Function to reset the search and clear current product ID
 const resetSearch = () => {
   productIdQuery.value = "";
   ingredientProducts.value = [];
 };
 
 const addLink = async () => {
+  if (!productIdQuery.value || !newLink.value.id_ingredient || !newLink.value.quantity) {
+    alert('Please ensure all fields are filled correctly.');
+    return;
+  }
   try {
+    // Post data to the backend API for adding a new link
     await axios.post("http://localhost:5000/api/product/ingredients", {
       id_product: productIdQuery.value,
       id_ingredient: newLink.value.id_ingredient,
       quantity: newLink.value.quantity,
     });
-    await fetchIngredientsByProductId();
-    newLink.value = { id_ingredient: "", quantity: "" };
+    alert('Link added successfully');
+    fetchIngredientsByProductId();  // Refresh the list to include the new link
+    newLink.value = { id_ingredient: "", quantity: "" };  // Reset the form fields
   } catch (error) {
     console.error("Error adding link:", error);
+    alert(`Error adding link: ${error.response?.data.message || error.message}`);
   }
 };
 
 const editQuantity = (link) => {
-  isEditing.value = true;
-  editingLink.value = { ...link };
-};
-
-const updateQuantity = async () => {
-  try {
-    // Call the PATCH endpoint with updated quantity
-    await axios.patch(
-      `http://localhost:5000/api/product/${productIdQuery.value}/ingredients/${editingLink.value.id_ingredient}`,
-      { quantity: editingLink.value.quantity }
-    );
-
-    // Update UI
-    const index = ingredientProducts.value.findIndex(
-      (item) => item.id_ingredient === editingLink.value.id_ingredient
-    );
-    if (index !== -1) {
-      ingredientProducts.value[index].quantity = editingLink.value.quantity;
-    }
-
-    // Close modal and reset editing state
-    isEditing.value = false;
-    editingLink.value = { id_ingredient: "", quantity: "" };
-  } catch (error) {
-    console.error(
-      "Error updating quantity:",
-      error.response?.data || error.message
-    );
-    alert("Failed to update quantity. Please try again.");
+  const newQuantity = prompt(`Enter new quantity for Ingredient ID ${link.id_ingredient}`, link.quantity);
+  if (newQuantity !== null && newQuantity !== link.quantity) {
+    updateQuantity(link.id_ingredient, newQuantity);
   }
 };
 
+const updateQuantity = async (id_ingredient, quantity) => {
+  try {
+    const response = await axios.patch(
+      `http://localhost:5000/api/product/${productIdQuery.value}/ingredients/${id_ingredient}`,
+      { quantity: quantity }
+    );
+    alert('Quantity updated successfully');
+    fetchIngredientsByProductId();  // Refresh the list to reflect the updated quantity
+  } catch (error) {
+    console.error("Error updating quantity:", error.response?.data || error.message);
+    alert(`Failed to update quantity: ${error.response?.data.message || error.message}`);
+  }
+};
+
+// Function to delete an ingredient link
 const deleteLink = async (id_ingredient) => {
   try {
-    await axios.delete(
+    const response = await axios.delete(
       `http://localhost:5000/api/product/${productIdQuery.value}/ingredients/${id_ingredient}`
     );
-    await fetchIngredientsByProductId();
+    fetchIngredientsByProductId();
+    alert('Link deleted successfully');
   } catch (error) {
     console.error("Error deleting link:", error);
+    alert(`Error deleting link: ${error.response?.data.message || error.message}`);
   }
 };
+
+// Watch for route changes to update the product ID and fetch new data
+watch(() => route.query.productId, (newProductId) => {
+  productIdQuery.value = newProductId;
+  if (newProductId) {
+    fetchIngredientsByProductId();
+  }
+}, { immediate: true });
 
 const cancelEdit = () => {
   isEditing.value = false;

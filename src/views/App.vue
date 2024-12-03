@@ -57,6 +57,9 @@ const closeMenu = () => {
               <ul class="dropdown-menu">
                 <li><RouterLink to="/product" class="dropdown-item" @click="closeMenu">Product List</RouterLink></li>
                 <li><RouterLink to="/product-form" class="dropdown-item" @click="closeMenu">Product Form</RouterLink></li>
+                <li><RouterLink to="/price-history" class="dropdown-item" @click="closeMenu">Price History By Product ID</RouterLink></li>
+                <li><RouterLink to="/client-products" class="dropdown-item" @click="closeMenu">Client Product Page</RouterLink></li>
+                <li><RouterLink to="/product-ingredient" class="dropdown-item" @click="closeMenu">Ingredients By Product ID</RouterLink></li>
               </ul>
             </li>
             <!-- Section Product Category -->
@@ -100,6 +103,9 @@ const closeMenu = () => {
             <li><RouterLink to="/order-form" class="footer-nav-link">Order Form</RouterLink></li>
             <li><RouterLink to="/product" class="footer-nav-link">Product List</RouterLink></li>
             <li><RouterLink to="/product-form" class="footer-nav-link">Product Form</RouterLink></li>
+            <li><RouterLink to="/price-history" class="footer-nav-link">Price History By Product ID</RouterLink></li>
+            <li><RouterLink to="/client-products" class="footer-nav-link">Client Product Page</RouterLink></li>
+            <li><RouterLink to="/product-ingredient" class="footer-nav-link">Ingredients By Product ID</RouterLink></li>
             <li><RouterLink to="/product_category" class="footer-nav-link">Product Category List</RouterLink></li>
             <li><RouterLink to="/product_category-form" class="footer-nav-link">Product Category Form</RouterLink></li>
             <li><RouterLink to="/supplier" class="footer-nav-link">Supplier List</RouterLink></li>
@@ -114,4 +120,7 @@ const closeMenu = () => {
 </template>
 
 <style>
+.content {
+  padding: 50px;
+}
 </style>
