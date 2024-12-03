@@ -4,5 +4,6 @@
       "@/*": ["./src/*"]
     }
   },
+  "include": ["src/**/*.js", "src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

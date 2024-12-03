@@ -12,8 +12,13 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'Home', component: Home },
     ...ingredientRoutes,
-    ...orderRoutes
+    ...orderRoutes,
+    ...userRoutes,
+    ...product_categoryRoutes,
+    ...productRoutes,
+    ...supplierRoutes,
   ],
 })
 
 export default router
+
