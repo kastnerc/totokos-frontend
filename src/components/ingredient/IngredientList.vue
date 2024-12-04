@@ -47,17 +47,17 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
+import { useRouter } from "vue-router"; // Import the useRouter hook
 
 const router = useRouter();
 const ingredients = ref([]);
-const searchQuery = ref({ id_ingredient: "", id_supplier: "" });
+const searchQuery = ref({ id_ingredient: "", id_supplier: "" }); // Separate fields for search
 const searchResult = ref(null);
 const currentPage = ref(1);
 const totalPages = ref(1);
-const pageSize = 10;
+const pageSize = 10; // Number of items per page
 
-// Fetch ingredients with pagination
+// Fetch all ingredients with pagination
 const getIngredients = async (page = 1) => {
   try {
     const res = await axios.get(`http://localhost:5000/api/ingredient?page=${page}&limit=${pageSize}`);
@@ -79,29 +79,52 @@ const deleteIngredient = async (id) => {
   }
 };
 
-// Update ingredient
+// Navigate to the update form
 const updateIngredient = (id) => {
-  router.push({ name: "IngredientForm", params: { id } });
+  router.push({ name: 'IngredientForm', params: { id } }); // Navigate to the form with the ingredient ID
 };
 
-// Search by ID or Supplier
+// Search by Ingredient ID
+const getIngredientById = async (id) => {
+  try {
+    const res = await axios.get(`http://localhost:5000/api/ingredient/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching ingredient by ID:", error);
+    return null;
+  }
+};
+
+// Search by Supplier ID
+const getIngredientsBySupplierId = async (id_supplier) => {
+  try {
+    const res = await axios.get(`http://localhost:5000/api/ingredient/supplier/${id_supplier}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching ingredients by Supplier ID:", error);
+    return null;
+  }
+};
+
+// Search function
 const search = async () => {
   const { id_ingredient, id_supplier } = searchQuery.value;
 
+  // Search by Ingredient ID
   if (id_ingredient) {
     const id = parseInt(id_ingredient, 10);
     if (isNaN(id)) {
       alert("Please enter a valid number for Ingredient ID");
       return;
     }
-      const result = await getIngredientById(id);
-      if (result) {
-        searchResult.value = [result];
-        return;
-      }
+    const result = await getIngredientById(id);
+    if (result) {
+      searchResult.value = [result];
+      return;
     }
-  
+  }
 
+  // Search by Supplier ID
   if (id_supplier) {
     const id = parseInt(id_supplier, 10);
     if (isNaN(id)) {
@@ -118,7 +141,6 @@ const search = async () => {
   // If no valid search result, reset
   searchResult.value = null;
   alert("No search results found");
-  searchResult.value = null;
 };
 
 // Reset search
@@ -130,11 +152,18 @@ const resetSearch = () => {
 
 // Filtered ingredients
 const Ingredients = computed(() => {
-  if (searchResult.value) return searchResult.value;
+  if (searchResult.value) {
+    return searchResult.value;
+  }
   return ingredients.value;
 });
 
-// Pagination
+// Fetch ingredients on mount
+onMounted(() => {
+  getIngredients();
+});
+
+// Pagination methods
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
@@ -148,11 +177,6 @@ const nextPage = () => {
     getIngredients(currentPage.value);
   }
 };
-
-// Initial fetch
-onMounted(() => {
-  getIngredients();
-});
 </script>
 
 <style scoped>
