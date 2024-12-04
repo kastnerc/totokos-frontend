@@ -1,13 +1,13 @@
 <template>
-  <main>
-    <h1>Order List</h1>
-    <div>
-      <input v-model="searchQuery" placeholder="Search by Order ID or User ID" />
-      <button @click="searchByOrderId">Search by Order ID</button>
-      <button @click="searchByUserId">Search by User ID</button>
-      <button @click="resetSearch">Reset</button>
+  <main class="order-list-container">
+    <h1 class="title">Order List</h1>
+    <div class="search-bar">
+      <input v-model="searchQuery" placeholder="Search by Order ID or User ID" class="search-input" />
+      <button @click="searchByOrderId" class="btn btn-green">Search by Order ID</button>
+      <button @click="searchByUserId" class="btn btn-green">Search by User ID</button>
+      <button @click="resetSearch" class="btn btn-red">Reset</button>
     </div>
-    <table class="table table-striped">
+    <table class="table">
       <thead>
         <tr>
           <th>Order ID</th>
@@ -29,26 +29,26 @@
           <td>{{ order.status }}</td>
           <td>{{ order.reservation }}</td>
           <td>{{ order.pickup_date }}</td>
-          <td>
+          <td class="actions">
             <button @click="goToUpdateForm(order.id_order)" class="btn btn-primary">Update</button>
-            <button class="btn btn-success">Details</button>
-            <button @click="deleteOrder(order.id_order)" class="btn btn-danger">Delete</button>
+            <button class="btn btn-green">Details</button>
+            <button @click="deleteOrder(order.id_order)" class="btn btn-red">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="pagination">
-      <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+      <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-red">Previous</button>
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+      <button @click="nextPage" :disabled="currentPage === totalPages" class="btn btn-green">Next</button>
     </div>
   </main>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import { useRoute, useRouter } from "vue-router";
 
 const orders = ref([]);
 const currentPage = ref(1);
@@ -59,39 +59,36 @@ const router = useRouter();
 const route = useRoute();
 
 const getOrders = async (page = 1) => {
-  axios.get(`http://localhost:5000/api/order/?page=${page}&limit=${pageSize}`)
-    .then(res => {
-      orders.value = res.data.data;
-      totalPages.value = Math.ceil(res.data.total / pageSize);
-      currentPage.value = page;
-    })
-    .catch(error => console.error("Error fetching orders:", error));
+  try {
+    const res = await axios.get(`http://localhost:5000/api/order/?page=${page}&limit=${pageSize}`);
+    orders.value = res.data.data;
+    totalPages.value = Math.ceil(res.data.total / pageSize);
+    currentPage.value = page;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
 };
 
 const searchByOrderId = async () => {
-  if (searchQuery.value) {
-    try {
-      const response = await axios.get(`http://localhost:5000/api/order/${searchQuery.value}`);
-      orders.value = response.data ? [response.data] : [];
-      totalPages.value = 1;
-    } catch (error) {
-      console.error("Error fetching order:", error);
-      alert("Order not found or error occurred.");
-      resetSearch();
-    }
+  try {
+    const res = await axios.get(`http://localhost:5000/api/order/${searchQuery.value}`);
+    orders.value = res.data ? [res.data] : [];
+    totalPages.value = 1;
+  } catch (error) {
+    console.error("Error fetching order:", error);
+    alert("Order not found.");
+    resetSearch();
   }
 };
 
 const searchByUserId = async () => {
-  if (searchQuery.value) {
-    try {
-      const response = await axios.get(`http://localhost:5000/api/user/${searchQuery.value}/orders`);
-      orders.value = response.data.data.length > 0 ? response.data.data : [];
-      totalPages.value = Math.ceil(response.data.data.length / pageSize);
-    } catch (error) {
-      alert("User not found or no orders for this user.");
-      resetSearch();
-    }
+  try {
+    const res = await axios.get(`http://localhost:5000/api/user/${searchQuery.value}/orders`);
+    orders.value = res.data.data;
+    totalPages.value = Math.ceil(res.data.data.length / pageSize);
+  } catch (error) {
+    alert("User not found or no orders.");
+    resetSearch();
   }
 };
 
@@ -100,32 +97,130 @@ const resetSearch = () => {
   getOrders(currentPage.value);
 };
 
-const deleteOrder = (id) => {
-  axios.delete(`http://localhost:5000/api/order/${id}`)
-    .then(() => {
-      getOrders(currentPage.value); // Refresh the list after deletion
-    })
-    .catch(error => console.error("Error deleting order:", error));
+const deleteOrder = async (id) => {
+  try {
+    await axios.delete(`http://localhost:5000/api/order/${id}`);
+    getOrders(currentPage.value);
+  } catch (error) {
+    console.error("Error deleting order:", error);
+  }
 };
 
 const goToUpdateForm = (id) => {
   router.push({ name: "OrderForm", params: { id } });
 };
 
-// Load initial data or perform search based on URL parameters
 onMounted(() => {
   const userIdFromUrl = route.query.userId;
   if (userIdFromUrl) {
-    searchQuery.value = userIdFromUrl;  // Set the user ID into the search bar
-    searchByUserId();  // Trigger the search function
+    searchQuery.value = userIdFromUrl;
+    searchByUserId();
   } else {
-    getOrders(currentPage.value);  // Load the initial set of orders if no user ID is specified
+    getOrders(currentPage.value);
   }
 });
 </script>
 
-
 <style scoped>
+.order-list-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.search-input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-green {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-green:hover {
+  background-color: #218838;
+}
+
+.btn-red {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-red:hover {
+  background-color: #c82333;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -134,6 +229,7 @@ onMounted(() => {
 }
 
 .pagination button {
+  padding: 8px 12px;
   margin: 0 5px;
 }
 </style>

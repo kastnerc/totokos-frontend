@@ -1,12 +1,16 @@
 <template>
-  <main>
-    <h1>User list</h1>
-    <div>
-      <input v-model="searchQuery" placeholder="Search by User ID" />
-      <button @click="searchById">Search</button>
-      <button @click="resetSearch">Reset</button>
+  <main class="user-list-container">
+    <h1>User List</h1>
+    <div class="search-bar">
+      <input
+        v-model="searchQuery"
+        placeholder="Search by User ID"
+        class="search-input"
+      />
+      <button @click="searchById" class="btn btn-green">Search</button>
+      <button @click="resetSearch" class="btn btn-red">Reset</button>
     </div>
-    <table class="table table-striped">
+    <table class="table">
       <thead>
         <tr>
           <th>User ID</th>
@@ -22,7 +26,7 @@
           <th>Province</th>
           <th>Country</th>
           <th>Postal Code</th>
-          <th>Image</th> <!-- Added image column -->
+          <th>Image</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -41,26 +45,32 @@
           <td>{{ user.province }}</td>
           <td>{{ user.country }}</td>
           <td>{{ user.postal_code }}</td>
-          <td><img :src="user.image" alt="User Image" style="width: 50px; height: auto;"></td> <!-- Image display -->
           <td>
-            <button class="btn btn-primary" @click="goToUpdate(user.id_user)">Update</button> <!-- Modified button -->
-            <button @click="goToOrders(user.id_user)" class="btn btn-info">View Orders</button>
-            <button @click="deleteUser(user.id_user)" class="btn btn-danger">Delete</button>
+            <img
+              :src="user.image"
+              alt="User Image"
+              class="user-image"
+            />
+          </td>
+          <td class="actions">
+            <button @click="goToUpdate(user.id_user)" class="btn btn-blue">Update</button>
+            <button @click="goToOrders(user.id_user)" class="btn btn-green">View Orders</button>
+            <button @click="deleteUser(user.id_user)" class="btn btn-red">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
   </main>
 </template>
-  
-  <script setup>
+
+<script setup>
   import { onBeforeMount, ref, computed } from 'vue';
   // Import Axios for communication with the API
   import axios from 'axios';
   import { useRouter } from 'vue-router'; // Import router
   
   // Define the users variable
-  const users = ref([]);
+const users = ref([]);
 const searchQuery = ref(""); // Search input value
 const searchResult = ref(null); // Search result (for a single user)
 const router = useRouter();
@@ -79,7 +89,7 @@ const goToOrders = (userId) => {
       })
       .catch(error => console.error(error));
   }
-  
+
   const deleteUser = (id) => {
   axios.delete(`http://localhost:5000/api/user/${id}`)
     .then(() => {
@@ -151,16 +161,99 @@ const Users = computed(() => {
 const goToUpdate = (id) => {
   router.push({ name: 'UserForm', params: { id } }); // Assumes you have a route named 'UserForm'
 };
-  
+
   onBeforeMount(() => {
     getUsers();
   });
   
-  </script>
+</script>
 
 <style scoped>
-img {
-  width: 50px; /* Set a fixed width for the images */
-  height: auto; /* Maintain aspect ratio */
+.user-list-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f4f4f4;
+}
+
+.user-image {
+  width: 50px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
+}
+
+.btn {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-blue {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-blue:hover {
+  background-color: #0056b3;
+}
+
+.btn-green {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-green:hover {
+  background-color: #218838;
+}
+
+.btn-red {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-red:hover {
+  background-color: #c82333;
 }
 </style>
