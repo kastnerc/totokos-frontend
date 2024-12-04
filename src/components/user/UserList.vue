@@ -64,108 +64,81 @@
 </template>
 
 <script setup>
-  import { onBeforeMount, ref, computed } from 'vue';
-  // Import Axios for communication with the API
-  import axios from 'axios';
-  import { useRouter } from 'vue-router'; // Import router
-  
-  // Define the users variable
+import { onBeforeMount, ref, computed } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+
 const users = ref([]);
-const searchQuery = ref(""); // Search input value
-const searchResult = ref(null); // Search result (for a single user)
+const searchQuery = ref("");
+const searchResult = ref(null);
 const router = useRouter();
 
-const goToOrders = (userId) => {
-  router.push({ name: 'OrderList', query: { userId } }); // Assumes you have a route named 'OrderList' that can handle a query parameter for user ID
-};
-  
-  // Function to get the users from the API
-  const getUsers = () => {
-    axios.get('http://localhost:5000/api/user/')
-      .then(res => {
-        console.log("liste", res)
-        users.value = res.data.data;
-        console.log("liste", users.value)
-      })
-      .catch(error => console.error(error));
+const getUsers = async () => {
+  try {
+    const response = await axios.get("http://localhost:5000/api/user/");
+    users.value = response.data.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
   }
-
-  const deleteUser = (id) => {
-  axios.delete(`http://localhost:5000/api/user/${id}`)
-    .then(() => {
-      console.log(`User with ID ${id} deleted`);
-
-      // Remove the user from the users array directly
-      users.value = users.value.filter(user => user.id_user !== id);
-
-      // Check if the deleted user is in the search result
-      if (searchResult.value && searchResult.value.id_user === id) {
-        searchResult.value = null; // Clear the search result if the deleted user is shown
-        alert("User has been deleted.");
-      }
-    })
-    .catch(error => console.error("Error deleting user:", error));
 };
 
+const deleteUser = async (id) => {
+  try {
+    await axios.delete(`http://localhost:5000/api/user/${id}`);
+    users.value = users.value.filter((user) => user.id_user !== id);
+    if (searchResult.value?.id_user === id) {
+      searchResult.value = null;
+    }
+    alert("User deleted successfully");
+  } catch (error) {
+    console.error("Error deleting user:", error);
+  }
+};
 
-  
-// Function to fetch an user by ID
 const getUserById = async (id) => {
   try {
-    const res = await axios.get(`http://localhost:5000/api/user/${id}`);
-    return res.data.data; // Return the fetched user
+    const response = await axios.get(`http://localhost:5000/api/user/${id}`);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching user by ID:", error);
-    return null; // Return null if there was an error
+    return null;
   }
 };
 
-// Function to handle the search by ID
 const searchById = async () => {
   if (searchQuery.value) {
-    // Convert searchQuery to an integer
     const id = parseInt(searchQuery.value, 10);
     if (isNaN(id)) {
       alert("Please enter a valid number");
       return;
     }
-
     const result = await getUserById(id);
-    if (result) {
-      searchResult.value = result;
-    } else {
-      alert("user not found");
-      searchResult.value = null; // Ensure this is set to null if not found
-    }
+    searchResult.value = result || null;
+    if (!result) alert("User not found");
   } else {
     resetSearch();
   }
 };
 
-// Function to reset the search
 const resetSearch = () => {
-  searchQuery.value = ""; // Clear the search input
-  searchResult.value = null; // Clear the search result
-  getUsers(); // Reload all users
+  searchQuery.value = "";
+  searchResult.value = null;
+  getUsers();
 };
 
-// Computed property to return filtered or full list of users
 const Users = computed(() => {
-  if (searchQuery.value && searchResult.value) {
-    return [searchResult.value];
-  }
-  return users.value;
+  return searchResult.value ? [searchResult.value] : users.value;
 });
 
-// New function to handle navigation for updating user
 const goToUpdate = (id) => {
-  router.push({ name: 'UserForm', params: { id } }); // Assumes you have a route named 'UserForm'
+  router.push({ name: "UserForm", params: { id } });
 };
 
-  onBeforeMount(() => {
-    getUsers();
-  });
-  
+const goToOrders = (userId) => {
+  router.push({ name: "OrderList", query: { userId } });
+};
+
+onBeforeMount(getUsers);
 </script>
 
 <style scoped>

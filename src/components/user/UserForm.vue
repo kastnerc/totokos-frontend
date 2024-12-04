@@ -209,8 +209,8 @@
   
       const handleSubmit = async () => {
         const formData = new FormData();
-            Object.keys(user.value).forEach(key => {
-                if (user.value[key] && key !== 'id_user') { // Exclude id_user from formData unless it's necessary for a specific endpoint
+        Object.keys(user.value).forEach((key) => {
+          if (user.value[key]) {
             formData.append(key, user.value[key]);
           }
         });

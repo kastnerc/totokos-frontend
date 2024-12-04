@@ -84,29 +84,7 @@ const updateIngredient = (id) => {
   router.push({ name: "IngredientForm", params: { id } });
 };
 
-// Search by Ingredient ID
-const getIngredientById = async (id) => {
-  try {
-    const res = await axios.get(`http://localhost:5000/api/ingredient/${id}`);
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching ingredient by ID:", error);
-    return null;
-  }
-};
-
-// Search by Supplier ID
-const getIngredientsBySupplierId = async (id_supplier) => {
-  try {
-    const res = await axios.get(`http://localhost:5000/api/ingredient/supplier/${id_supplier}`);
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching ingredients by Supplier ID:", error);
-    return null;
-  }
-};
-
-// Search function
+// Search by ID or Supplier
 const search = async () => {
   const { id_ingredient, id_supplier } = searchQuery.value;
 
@@ -130,17 +108,17 @@ const search = async () => {
       alert("Please enter a valid number for Supplier ID");
       return;
     }
-      const result = await getIngredientsBySupplierId(id);
+    const result = await getIngredientsBySupplierId(id);
     if (result && result.length > 0) {
-        searchResult.value = result;
-        return;
-      }
+      searchResult.value = result;
+      return;
     }
-  
+  }
 
   // If no valid search result, reset
   searchResult.value = null;
   alert("No search results found");
+  searchResult.value = null;
 };
 
 // Reset search
@@ -152,18 +130,11 @@ const resetSearch = () => {
 
 // Filtered ingredients
 const Ingredients = computed(() => {
-  if (searchResult.value) {
-    return searchResult.value;
-  }
+  if (searchResult.value) return searchResult.value;
   return ingredients.value;
 });
 
-// Fetch ingredients on mount
-onMounted(() => {
-  getIngredients();
-});
-
-// Pagination methods
+// Pagination
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;

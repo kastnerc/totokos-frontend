@@ -53,38 +53,40 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
 export default {
-  data() {
-    return {
-      productId: "", // Input field value
-      priceHistories: [], // Array to store the fetched price histories
-      error: null, // Error message if any
-      loading: false, // Loading state
-    };
-  },
-  methods: {
-    async fetchPriceHistory() {
-      this.error = null;
-      this.loading = true;
-      this.priceHistories = [];
+  setup() {
+    const productId = ref(""); // Input field value
+    const priceHistories = ref([]); // Array to store the fetched price histories
+    const error = ref(null); // Error message if any
+    const loading = ref(false); // Loading state
+
+    const route = useRoute();
+
+    const fetchPriceHistory = async () => {
+      error.value = null;
+      loading.value = true;
+      priceHistories.value = [];
 
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/product/${this.productId}/price-history/`
+          `http://localhost:5000/api/product/${productId.value}/price-history/`
         );
-        this.priceHistories = response.data.data;
+        priceHistories.value = response.data.data;
       } catch (err) {
-        this.error = err.response?.data?.message || "Error fetching data";
+        error.value = err.response?.data?.message || "Error fetching data";
       } finally {
-        this.loading = false;
+        loading.value = false;
       }
-    },
-  },
-  mounted() {
-    const route = useRoute();
-    this.productId = route.query.id_product; // Fetch id_product from query parameters
-    if (this.productId) {
-      this.fetchPriceHistory(); // Automatically fetch price history
+    };
+
+    onMounted(() => {
+      const idFromRoute = route.query.id_product; // Fetch id_product from query parameters
+      if (idFromRoute) {
+        productId.value = idFromRoute;
+        fetchPriceHistory(); // Automatically fetch price history
       }
+    });
+
+    return { productId, priceHistories, error, loading, fetchPriceHistory };
   },
 };
 </script>
