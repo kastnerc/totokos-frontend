@@ -24,7 +24,7 @@ const closeMenu = () => {
       <header>
         <nav id="nav-container">
           <!-- Logo -->
-          <div class="logo">Totoko's Temptations</div>
+          <div class="logo"><img src="../assets/Totokos.Temptations.Logo.Website.png" alt="Logo Totoko">Totoko's Temptations</div>
 
           <!-- Hamburger Menu Icon -->
           <div class="hamburger" @click="toggleMenu">
@@ -35,6 +35,7 @@ const closeMenu = () => {
 
           <!-- Navigation Menu -->
           <ul :class="['nav-list', { visible: isMenuVisible }]" id="header-menu">
+            <li><RouterLink to="/" class="normal-link">Home</RouterLink></li>
             <!-- Section Ingredient -->
             <li class="dropdown">
               <span class="nav-link dropdown-title">Ingredient</span>
@@ -49,6 +50,7 @@ const closeMenu = () => {
               <ul class="dropdown-menu">
                 <li><RouterLink to="/order" class="dropdown-item" @click="closeMenu">Order List</RouterLink></li>
                 <li><RouterLink to="/order-form" class="dropdown-item" @click="closeMenu">Order Form</RouterLink></li>
+                <li><RouterLink to="/order-products" class="dropdown-item" @click="closeMenu">Products By Order ID</RouterLink></li>
               </ul>
             </li>
             <!-- Section Product -->
@@ -97,10 +99,12 @@ const closeMenu = () => {
       <footer>
         <nav id="footer-nav">
           <ul class="footer-nav-list">
+            <li><RouterLink to="/" class="footer-nav-link">Home</RouterLink></li>
             <li><RouterLink to="/ingredient" class="footer-nav-link">Ingredient List</RouterLink></li>
             <li><RouterLink to="/ingredient-form" class="footer-nav-link">Ingredient Form</RouterLink></li>
             <li><RouterLink to="/order" class="footer-nav-link">Order List</RouterLink></li>
             <li><RouterLink to="/order-form" class="footer-nav-link">Order Form</RouterLink></li>
+            <li><RouterLink to="/order-products" class="footer-nav-link">Products By Order ID</RouterLink></li>
             <li><RouterLink to="/product" class="footer-nav-link">Product List</RouterLink></li>
             <li><RouterLink to="/product-form" class="footer-nav-link">Product Form</RouterLink></li>
             <li><RouterLink to="/price-history" class="footer-nav-link">Price History By Product ID</RouterLink></li>
@@ -120,7 +124,28 @@ const closeMenu = () => {
 </template>
 
 <style>
+/* Make sure the body and html occupy full height */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure it fills at least the viewport height */
+  background-color: #edece6;
+}
+
+header, .content, footer {
+  flex-shrink: 0; /* Prevent flex items from being smaller than their content */
+}
+
 .content {
-  padding: 50px;
+  flex-grow: 1; /* Allows the content area to expand and fill the available space */
+}
+
+footer {
+  text-align: center; /* Center align the text */
 }
 </style>

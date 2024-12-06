@@ -156,7 +156,7 @@ const cancelEdit = () => {
 <style scoped>
 .ingredient-product-container {
   max-width: 900px;
-  margin: 20px auto;
+  margin: 20px auto 225px;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;

@@ -31,7 +31,7 @@
           <td>{{ order.pickup_date }}</td>
           <td class="actions">
             <button @click="goToUpdateForm(order.id_order)" class="btn btn-primary">Update</button>
-            <button class="btn btn-green">Details</button>
+            <button class="btn btn-green" @click="navigateToProductDetails(order.id_order)">Products in Order</button>
             <button @click="deleteOrder(order.id_order)" class="btn btn-red">Delete</button>
           </td>
         </tr>
@@ -109,6 +109,11 @@ const deleteOrder = async (id) => {
 const goToUpdateForm = (id) => {
   router.push({ name: "OrderForm", params: { id } });
 };
+
+const navigateToProductDetails = (id) => {
+  router.push({ name: 'OrderProducts', params: { id } });
+};
+
 
 onMounted(() => {
   const userIdFromUrl = route.query.userId;

@@ -94,7 +94,7 @@ export default {
 <style scoped>
 .price-history-container {
   max-width: 600px;
-  margin: 20px auto;
+  margin: 20px auto 270px;
   padding: 20px;
   font-family: Arial, sans-serif;
   background-color: #ffffff;

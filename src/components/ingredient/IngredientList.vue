@@ -182,7 +182,7 @@ const nextPage = () => {
 <style scoped>
 .ingredient-list-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;

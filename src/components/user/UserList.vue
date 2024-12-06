@@ -2,64 +2,56 @@
   <main class="user-list-container">
     <h1>User List</h1>
     <div class="search-bar">
-      <input
-        v-model="searchQuery"
-        placeholder="Search by User ID"
-        class="search-input"
-      />
+      <input v-model="searchQuery" placeholder="Search by User ID" class="search-input" />
       <button @click="searchById" class="btn btn-green">Search</button>
       <button @click="resetSearch" class="btn btn-red">Reset</button>
     </div>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>User ID</th>
-          <th>Username</th>
-          <th>Surname</th>
-          <th>Name</th>
-          <th>Contact Info</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Last Connection Date</th>
-          <th>Address</th>
-          <th>City</th>
-          <th>Province</th>
-          <th>Country</th>
-          <th>Postal Code</th>
-          <th>Image</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="user in Users" :key="user.id_user">
-          <td>{{ user.id_user }}</td>
-          <td>{{ user.username }}</td>
-          <td>{{ user.surname }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.contact_info }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.role }}</td>
-          <td>{{ user.last_connection_date }}</td>
-          <td>{{ user.address }}</td>
-          <td>{{ user.city }}</td>
-          <td>{{ user.province }}</td>
-          <td>{{ user.country }}</td>
-          <td>{{ user.postal_code }}</td>
-          <td>
-            <img
-              :src="user.image"
-              alt="User Image"
-              class="user-image"
-            />
-          </td>
-          <td class="actions">
-            <button @click="goToUpdate(user.id_user)" class="btn btn-blue">Update</button>
-            <button @click="goToOrders(user.id_user)" class="btn btn-green">View Orders</button>
-            <button @click="deleteUser(user.id_user)" class="btn btn-red">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Contact Info</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Last Connection Date</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>Province</th>
+            <th>Country</th>
+            <th>Postal Code</th>
+            <th>Image</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in Users" :key="user.id_user">
+            <td>{{ user.id_user }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.contact_info }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.last_connection_date }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.city }}</td>
+            <td>{{ user.province }}</td>
+            <td>{{ user.country }}</td>
+            <td>{{ user.postal_code }}</td>
+            <td><img :src="user.image" alt="User Image" class="user-image" /></td>
+            <td class="actions">
+              <button @click="goToUpdate(user.id_user)" class="btn btn-blue">Update</button>
+              <button @click="goToOrders(user.id_user)" class="btn btn-green">View Orders</button>
+              <button @click="deleteUser(user.id_user)" class="btn btn-red">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </main>
 </template>
 
@@ -166,8 +158,13 @@ onBeforeMount(getUsers);
   flex: 1;
 }
 
+.table-responsive {
+  overflow-x: auto;
+}
+
 .table {
   width: 100%;
+  min-width: 1500px; /* Adjust this value based on your content needs */
   border-collapse: collapse;
   margin-top: 20px;
 }

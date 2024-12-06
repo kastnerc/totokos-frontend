@@ -4,7 +4,7 @@
         <h1 class="form-title">User Details</h1>
         <fieldset>
           <div class="form-group">
-            <label for="id_user">User ID (leave empty to add new)</label>
+            <label for="id_user">User ID (only enter to modify, leave empty to add new)</label>
             <input
               type="text"
               id="id_user"

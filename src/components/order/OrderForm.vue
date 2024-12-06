@@ -4,75 +4,37 @@
       <h1 class="form-title">Add/Modify an Order</h1>
       <fieldset class="form-fieldset">
         <div class="form-group">
-          <label for="id_order">Order ID</label>
-          <input
-            v-model="order.id_order"
-            type="text"
-            name="id_order"
-            id="id_order"
-            placeholder="Enter the order ID"
-            readonly
-          />
+          <label for="id_order">Order ID (only enter to modify, leave empty to add new)</label>
+          <input v-model="order.id_order" type="text" id="id_order" placeholder="Enter the order ID" />
         </div>
 
         <div class="form-group">
           <label for="user_id">User ID</label>
-          <input
-            v-model="order.id_user"
-            type="text"
-            name="user_id"
-            id="user_id"
-            placeholder="Enter the user ID"
-            required
-          />
+          <input v-model="order.id_user" type="text" id="user_id" placeholder="Enter the user ID" required />
         </div>
 
         <div class="form-group">
-          <label for="order_date">Order Date</label>
-          <input
-            v-model="order.order_date"
-            type="date"
-            name="order_date"
-            id="order_date"
-            required
-          />
+          <label for="pickup_date">Pickup Date</label>
+          <input v-model="order.pickup_date" type="date" id="pickup_date" />
         </div>
 
-        <div class="form-group">
-          <label for="total_price">Total Price</label>
-          <input
-            v-model="order.total_price"
-            type="number"
-            name="total_price"
-            id="total_price"
-            placeholder="Enter the total price"
-            required
-          />
-        </div>
-
-        <div class="form-group">
+        <div class="form-group" v-if="order.id_order">
           <label for="status">Status</label>
-          <input
-            v-model="order.status"
-            type="text"
-            name="status"
-            id="status"
-            placeholder="Enter the order status"
-            required
-          />
+          <input v-model="order.status" type="text" id="status" placeholder="Enter the order status" :required="!!order.id_order" />
         </div>
 
         <div class="form-group">
           <label for="products">Select Products</label>
-          <select v-model="selectedProducts" multiple>
-            <option
-              v-for="product in products"
-              :key="product.id_product"
-              :value="product.id_product"
-            >
+          <select v-model="selectedProductIds" multiple>
+            <option v-for="product in products" :key="product.id_product" :value="product.id_product">
               {{ product.product_name }} - ${{ product.product_price }}
             </option>
           </select>
+        </div>
+
+        <div v-for="id in selectedProductIds" :key="id" class="selected-product">
+          <label>{{ findProductName(id) }} Quantity:</label>
+          <input type="number" v-model="findProductById(id).quantity" min="1">
         </div>
 
         <div class="form-buttons">
@@ -85,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
 
@@ -93,52 +55,74 @@ const route = useRoute();
 const order = ref({
   id_order: "",
   id_user: "",
-  order_date: "",
-  total_price: "",
-  status: "",
+  pickup_date: "",
+  status: ""
 });
 const products = ref([]);
-const selectedProducts = ref([]);
+const selectedProductIds = ref([]);
 
 const fetchProducts = async () => {
   try {
     const response = await axios.get("http://localhost:5000/api/product");
-    products.value = response.data.data;
+    products.value = response.data.data.map(product => ({
+      ...product,
+      quantity: 1  // Initialize quantity for each product
+    }));
   } catch (error) {
     console.error("Error fetching products:", error);
   }
 };
 
 const handleSubmit = async () => {
+  const productsWithQuantities = selectedProductIds.value.map(id => {
+    const product = products.value.find(p => p.id_product === id);
+    return {
+      id_product: id,
+      quantity: product.quantity
+    };
+  });
+
+  const orderDetails = {
+    id_user: order.value.id_user,
+    pickup_date: order.value.pickup_date ? order.value.pickup_date : null,
+    status: order.value.status, // Default status if not provided
+    products: productsWithQuantities
+  };
+
+  // Prepare the payload according to the operation
+  const payload = order.value.id_order ? orderDetails : [orderDetails]; // Wrap in an array if adding
+
+  console.log("Final payload being sent:", JSON.stringify(payload));
+
+  if (!orderDetails.id_user || !orderDetails.products.length) {
+    return alert("Please ensure all required fields are filled correctly.");
+  }
+
+  const endpoint = order.value.id_order ? `http://localhost:5000/api/order/${order.value.id_order}` : "http://localhost:5000/api/order";
+  const method = order.value.id_order ? 'patch' : 'post';
+
   try {
-    if (order.value.id_order) {
-      await axios.patch(
-        `http://localhost:5000/api/order/${order.value.id_order}`,
-        { ...order.value, products: selectedProducts.value }
-      );
-      alert("Order updated successfully");
-    } else {
-      await axios.post("http://localhost:5000/api/order", {
-        ...order.value,
-        products: selectedProducts.value,
-      });
-      alert("Order added successfully");
-    }
+    await axios[method](endpoint, payload);
+    alert(`Order ${order.value.id_order ? 'updated' : 'added'} successfully`);
   } catch (error) {
     console.error("Error submitting order:", error);
-    alert("An error occurred");
+    alert(`An error occurred: ${error.response?.data?.message || error.message}`);
   }
 };
 
 const resetForm = () => {
-  order.value = {
-    id_order: "",
-    id_user: "",
-    order_date: "",
-    total_price: "",
-    status: "",
-  };
-  selectedProducts.value = [];
+  order.value = { id_order: "", id_user: "", pickup_date: "", status: "" };
+  selectedProductIds.value = [];
+};
+
+const findProductName = (id) => {
+  const product = products.value.find(p => p.id_product === id);
+  return product ? product.product_name : '';
+};
+
+const findProductById = (id) => {
+  const product = products.value.find(p => p.id_product === id);
+  return product || {};
 };
 
 onMounted(() => {
@@ -152,7 +136,12 @@ const getOrderById = async (id) => {
   try {
     const response = await axios.get(`http://localhost:5000/api/order/${id}`);
     order.value = response.data;
-    selectedProducts.value = response.data.products.map((p) => p.id_product);
+    selectedProductIds.value = response.data.products.map(p => p.id_product);
+    // Sync the quantities
+    response.data.products.forEach(product => {
+      const found = products.value.find(p => p.id_product === product.id_product);
+      if (found) found.quantity = product.quantity;
+    });
   } catch (error) {
     console.error("Error fetching order:", error);
   }
@@ -162,7 +151,7 @@ const getOrderById = async (id) => {
 <style scoped>
 .order-form-container {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;

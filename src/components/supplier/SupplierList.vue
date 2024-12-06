@@ -26,7 +26,6 @@
           <td>{{ supplier.supplier_email }}</td>
           <td class="actions">
             <button @click="goToEditForm(supplier.id_supplier)" class="btn btn-primary">Update</button>
-            <button class="btn btn-green">Details</button>
             <button @click="deleteSupplier(supplier.id_supplier)" class="btn btn-red">Delete</button>
           </td>
         </tr>

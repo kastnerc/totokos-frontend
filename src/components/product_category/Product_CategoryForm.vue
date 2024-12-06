@@ -108,7 +108,7 @@
   <style scoped>
   .category-form-container {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 20px auto 225px;
     padding: 20px;
     background: #fff;
     border-radius: 8px;

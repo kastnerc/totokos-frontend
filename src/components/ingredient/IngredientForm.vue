@@ -5,8 +5,8 @@
       <form @submit.prevent="handleSubmit" class="ingredient-form">
         <fieldset>
           <div class="form-group">
-            <label for="id_ingredient">Ingredient ID</label>
-            <input v-model="ingredient.id_ingredient" type="text" id="id_ingredient" placeholder="Ingredient ID" readonly />
+            <label for="id_ingredient">Ingredient ID (only enter to modify, leave empty to add new)</label>
+            <input v-model="ingredient.id_ingredient" type="text" id="id_ingredient" placeholder="Ingredient ID"/>
           </div>
 
           <div class="form-group">
@@ -52,7 +52,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router"; // Import the useRoute hook
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 const ingredient = ref({
@@ -78,10 +78,10 @@ const getIngredient = async (id) => {
 const handleSubmit = async () => {
   try {
     if (ingredient.value.id_ingredient) {
-      const response = await axios.patch(`http://localhost:5000/api/ingredient/${ingredient.value.id_ingredient}`, ingredient.value);
+      await axios.patch(`http://localhost:5000/api/ingredient/${ingredient.value.id_ingredient}`, ingredient.value);
       alert("Ingredient updated successfully");
     } else {
-      const response = await axios.post(`http://localhost:5000/api/ingredient/`, [ingredient.value]);
+      await axios.post(`http://localhost:5000/api/ingredient/`, [ingredient.value]);
       alert("Ingredient added successfully");
     }
   } catch (error) {
