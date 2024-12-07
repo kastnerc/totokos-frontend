@@ -71,9 +71,10 @@ This is the only other page a client can access. It exists to give access to use
 
 ## Conclusion
 
-All in all, the database created by the team is compete, and await their grade from their teacher, expecting their work to be well rewarded. The database is fully functionnal, and is ready to be the backbone to the upcoming front-end application.
+All in all, the visual part of the website created by the team is complete, and they await their grade from their teacher, expecting their work to be well rewarded. The database is fully functionnal, and the web pages are completely finished and furnished for commercial use of the ficticious Totoko's Temptations.
 
 ### Links
+![Totoko Animation Chefbase](https://github.com/user-attachments/assets/883d75ef-4e60-431d-a6d2-29982d631119)
 
 Totoko's Temptations:
 https://github.com/calebk5/Web-Client-UA3
