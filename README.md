@@ -4,10 +4,10 @@
 ![Totokos Temptations Logo Website](https://github.com/calebk5/Web-Client/assets/145488814/710a1527-cb2e-4786-8a07-6891eaf5912f)
 
 ## Introduction
-The following project was created by the same team that developed Totoko's Temptations last semester, and an earlier project based on the same project. The team is consisted of Caleb Kastner, the project manager, Georgio El-Koury, the driver of the project, and Tristan Bastien, the lead creative developper. The three decided to take the same bakery as Totoko's Temptations and create a backend database just as their teacher had asked. From then on, they added the frontend CSS and Vue the teacher had asked them to add as their final assignement this semester for the class. 
+The following project was created by the same team that developed _Totoko's Temptations_ last semester, and an earlier project based on the same project. The team is consisted of Caleb Kastner, the project manager, Georgio El-Koury, the driver of the project, and Tristan Bastien, the lead creative developper. The three decided to take the same bakery as _Totoko's Temptations_ and create a backend database just as their teacher had asked. From then on, they added the frontend CSS and Vue the teacher had asked them to add as their final assignement this semester for the class. 
 
 ## Frontend Pages
-In the following subsections, the screenshots are directly taken from the website's pages, and each have been modeled after the previous Totoko's temptations, with the added functionality of Totoko's Backend. Each of these pages can only be seen by employees of the ficticious _Totoko's Temptations_.
+In the following subsections, the screenshots are directly taken from the website's pages, and each have been modeled after the previous _Totoko's temptations_, with the added functionality of Totoko's Backend. Each of these pages can only be seen by employees of the ficticious _Totoko's Temptations_. They are quite bland to look at apart from the buttons, because they aren't designed to be nice on the eyes; They are used day and night by the hard working ficticious staff of _Totoko's_.
 
 ### Ingredient List
 This page shows the various ingredients the bakery uses in their produts. You can see the price, expiry date, and stock number on their right.
@@ -34,7 +34,7 @@ This is the page where all the possible categories a product can be identified u
 ![Screenshot 2024-12-06 142644](https://github.com/user-attachments/assets/0ace236b-dce5-4f78-b2fd-9ef08a439c60)
 
 ### Add/Modify Product
-When Totoko's Temptations want to add a new product for a special event, or want to update their confectionnary reservoir, they come to this page to creste them. Or if they so choose to modify a certain product, they can do that too.
+When _Totoko's Temptations_ wants to add a new product for a special event, or want to update their confectionnary reservoir, they come to this page to creste them. Or if they so choose to modify a certain product, they can do that too.
 ![Screenshot 2024-12-06 142652](https://github.com/user-attachments/assets/e8abf839-d12d-4b24-bc85-f4ff17b383b8)
 
 ### Search Price History
@@ -54,7 +54,7 @@ A very simple page that lets the employee either add, subtract, or modify any ca
 ![Screenshot 2024-12-06 142730](https://github.com/user-attachments/assets/8229e7e1-9b1f-46b8-84f4-e9645be984c7)
 
 ### Supplier List
-Totoko's Temptations recieve their ingredients from multiple sources, and this web page is the ideal place to categorize them.
+_Totoko's Temptations_ recieve their ingredients from multiple sources, and this web page is the ideal place to categorize them.
 ![Screenshot 2024-12-06 142739](https://github.com/user-attachments/assets/30000899-bead-47f7-adb3-3c8eeb6b0ce0)
 
 ### Add/Modify Supplier
@@ -71,12 +71,12 @@ This is the only other page a client can access. It exists to give access to use
 
 ## Conclusion
 
-All in all, the visual part of the website created by the team is complete, and they await their grade from their teacher, expecting their work to be well rewarded. The database is fully functionnal, and the web pages are completely finished and furnished for commercial use of the ficticious Totoko's Temptations.
+All in all, the visual part of the website created by the team is complete, and they await their grade from their teacher, expecting their work to be well rewarded. The database is fully functionnal, and the web pages are completely finished and furnished for commercial use of the ficticious _Totoko's Temptations_.
 
 ### Links
 ![Totoko Animation Chefbase](https://github.com/user-attachments/assets/883d75ef-4e60-431d-a6d2-29982d631119)
 
-Totoko's Temptations:
+_Totoko's Temptations_:
 https://github.com/calebk5/Web-Client-UA3
 
 Totoko's Backend:
