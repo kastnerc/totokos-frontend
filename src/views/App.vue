@@ -26,7 +26,7 @@ const closeMenu = () => {
           <!-- Logo -->
           <div class="logo"><img src="../assets/Totokos.Temptations.Logo.Website.png" alt="Logo Totoko">Totoko's Temptations</div>
 
-          <!-- Hamburger Menu Icon -->
+          <!-- Hamburger Icon -->
           <div class="hamburger" @click="toggleMenu">
             <span></span>
             <span></span>

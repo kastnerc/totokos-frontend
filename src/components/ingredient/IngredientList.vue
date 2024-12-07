@@ -7,6 +7,7 @@
       <button @click="search" class="btn btn-green">Search</button>
       <button @click="resetSearch" class="btn btn-red">Reset</button>
     </div>
+    <div class="table-container">
     <table class="table">
       <thead>
         <tr>
@@ -36,6 +37,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-red">Previous</button>
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
@@ -260,5 +262,64 @@ h1 {
 
 .pagination span {
   margin: 0 15px;
+}
+.table-container {
+  overflow-x: auto; 
+  margin-top: 10px; 
+}
+
+.table {
+  min-width: 900px; 
+  width: 100%; 
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column; 
+    align-items: stretch;
+  }
+
+  .table {
+    font-size: 12px; 
+  }
+
+  .table th,
+  .table td {
+    padding: 8px; 
+  }
+
+  .pagination {
+    flex-direction: column; 
+  }
+}
+
+@media (max-width: 480px) {
+  .table {
+    min-width: 600px; 
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .table th,
+  .table td {
+    font-size: 11px;
+    padding: 6px;
+  }
 }
 </style>

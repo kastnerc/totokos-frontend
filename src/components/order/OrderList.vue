@@ -7,6 +7,7 @@
       <button @click="searchByUserId" class="btn btn-green">Search by User ID</button>
       <button @click="resetSearch" class="btn btn-red">Reset</button>
     </div>
+    <div class="table-container">
     <table class="table">
       <thead>
         <tr>
@@ -37,6 +38,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-red">Previous</button>
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
@@ -236,5 +238,59 @@ onMounted(() => {
 .pagination button {
   padding: 8px 12px;
   margin: 0 5px;
+}
+@media (max-width: 790px) {
+  .order-list-container {
+    padding: 10px;
+  }
+
+  .search-bar {
+    flex-direction: column; 
+    align-items: stretch;
+  }
+
+  .search-input {
+    width: 100%; 
+    margin-bottom: 10px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .table {
+    min-width: 900px; 
+  }
+
+  .table th, .table td {
+    font-size: 12px; 
+    padding: 8px; 
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .pagination {
+    flex-direction: column; 
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 18px;
+  }
+
+  .btn {
+    font-size: 12px; 
+    padding: 6px 8px;
+  }
+
+  .table th, .table td {
+    font-size: 11px; 
+    padding: 6px; 
+  }
 }
 </style>

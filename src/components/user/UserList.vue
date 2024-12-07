@@ -226,4 +226,40 @@ onBeforeMount(getUsers);
 .btn-red:hover {
   background-color: #c82333;
 }
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column; 
+    align-items: stretch;
+    gap: 8px; 
+  }
+
+  .search-input {
+    width: 100%; 
+    margin-bottom: 5px; 
+  }
+
+  .btn {
+    width: 100%; 
+    margin-bottom: 5px; 
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    font-size: 12px;
+    padding: 8px; 
+    margin-bottom: 5px; 
+  }
+
+  .search-input {
+    font-size: 14px;
+    padding: 8px;
+    margin-bottom: 5px;
+  }
+
+  .user-image {
+    width: 40px;
+    height: auto;
+  }
+}
 </style>

@@ -7,6 +7,7 @@
       <button @click="searchByCategory" class="btn btn-success">Search by Category ID</button>
       <button @click="resetSearch" class="btn btn-danger">Reset</button>
     </div>
+    <div class="table-container">
     <table class="table">
       <thead>
         <tr>
@@ -38,6 +39,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1" class="btn btn-danger">Previous</button>
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
@@ -319,5 +321,64 @@ button:active {
 .pagination button {
   padding: 8px 12px;
   margin: 0 5px;
+}
+.table-container {
+  overflow-x: auto; 
+  margin-top: 10px; 
+}
+
+.table {
+  min-width: 900px; 
+  width: 100%; 
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column; 
+    align-items: stretch;
+  }
+
+  .table {
+    font-size: 12px;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px; 
+  }
+
+  .pagination {
+    flex-direction: column; 
+  }
+}
+
+@media (max-width: 480px) {
+  .table {
+    min-width: 600px; 
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .table th,
+  .table td {
+    font-size: 11px;
+    padding: 6px;
+  }
 }
 </style>
