@@ -49,12 +49,25 @@ This is one of the only pages meant for client to see. It shows them which produ
 This page lets the employees manage which ingredient is associated with which product. They can add and subtract the kinds of ingredients found under the product. A search feature is there, so that's helpful too.
 ![Screenshot 2024-12-06 142713](https://github.com/user-attachments/assets/a4d64222-05d3-4378-ab6c-dbb69bac0e5a)
 
-### 
+### Add/Modify Product Category
+A very simple page that lets the employee either add, subtract, or modify any category a product can identify itself under.
+![Screenshot 2024-12-06 142730](https://github.com/user-attachments/assets/8229e7e1-9b1f-46b8-84f4-e9645be984c7)
 
+### Supplier List
+Totoko's Temptations recieve their ingredients from multiple sources, and this web page is the ideal place to categorize them.
+![Screenshot 2024-12-06 142739](https://github.com/user-attachments/assets/30000899-bead-47f7-adb3-3c8eeb6b0ce0)
 
-###
+### Add/Modify Supplier
+From this page the multiple modifications and additions an employee can make to the suplier list are made.
+![Screenshot 2024-12-06 142750](https://github.com/user-attachments/assets/6256458b-9685-4b07-9c9e-bc00f06f28d1)
 
+### User List
+Perhaps the most important page, it shows every single user that has ever used the website since its creation. Very handy to organize people, or check their location information for deliveries.
+![Screenshot 2024-12-06 142755](https://github.com/user-attachments/assets/646eb4a5-570d-4c1d-a058-d512714a0ef3)
 
+### User Details
+This is the only other page a client can access. It exists to give access to user to freshly create their user profiles. The profiles will be used to monitor their orders, location data, and even discounts based on their age.
+![Screenshot 2024-12-06 142849](https://github.com/user-attachments/assets/6c0b8a71-1436-4247-92fc-7866f2ba771d)
 
 ## Conclusion
 
