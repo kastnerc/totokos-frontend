@@ -1,15 +1,17 @@
 <template>
   <div id="page-container">
     <main>
+      <!-- Welcome Section -->
       <div class="bienvenue">
         <div>
-          <h2>Explorez notre palette de saveurs dans notre</h2>
-          <h1>Boulangerie artisanale</h1>
+          <h2>Explore our range of flavors at our</h2>
+          <h1>Artisan Bakery</h1>
         </div>
       </div>
 
+      <!-- Product Display Section -->
       <div class="produit_accueil">
-        <h2>Nos produits les plus achetés</h2>
+        <h2>Our Bestsellers</h2>
         <div class="produit" v-for="product in products" :key="product.name">
           <div class="responsive-image">
             <img :src="product.image" :alt="product.name" @mouseover="handleMouseOver" @mouseout="handleMouseOut">
@@ -21,30 +23,30 @@
         </div>
       </div>
 
+      <!-- Opening Hours Information Section -->
       <div class="intro_info">
         <div class="intro_info2">
-          <h2>Nos heures d'ouverture</h2>
+          <h2>Our Opening Hours</h2>
           <ul>
-            <li v-for="hour in hours" :key="hour.day">{{ hour.day }} : {{ hour.time }}</li>
+            <li v-for="hour in hours" :key="hour.day">{{ hour.day }}: {{ hour.time }}</li>
           </ul>
           <p>
-            Chez Les Tentations de Totoko, chaque miche de pain, chaque viennoiserie et chaque pâtisserie est
-            préparée avec soin et dévotion, en utilisant des ingrédients de la plus haute qualité et
-            des méthodes de fabrication artisanales transmises de génération en génération.
+            At Totoko's Temptations, each loaf of bread, pastry, and bakery item is
+            prepared with care and devotion, using the highest quality ingredients and
+            artisanal methods passed down through generations.
           </p>
           <p>
-            Nous vous invitons à vous laisser séduire par nos délices fraîchement sortis du four, allant des
-            pains rustiques aux croissants dorés, en passant par nos gâteaux exquis et nos desserts
-            gourmands. Que vous soyez à la recherche d'un petit plaisir sucré pour accompagner votre café
-            du matin ou d'une délicieuse fournée pour une occasion spéciale, Les Tentations de Totoko saura
-            combler vos envies les plus gourmandes.
+            We invite you to indulge in our freshly baked delights, from rustic breads to golden croissants,
+            exquisite cakes, and gourmet desserts. Whether you are looking for a sweet treat to accompany your morning coffee
+            or a delicious batch for a special occasion, Totoko's Temptations will satisfy your most indulgent cravings.
           </p>
         </div>
 
+        <!-- Location Map -->
         <div class="carte">
-          <h2>Notre emplacement</h2>
+          <h2>Our Location</h2>
           <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11198.024034032962!2d-75.6268076!3d45.4394585!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cce0ff104b131ed%3A0x5045d05b7789c105!2zQ29sbMOoZ2UgTGEgQ2l0w6k!5e0!3m2!1sfr!2sca!4v1710124052989!5m2!1sfr!2sca" 
-            width="300" height="450" allowfullscreen="" loading="lazy" title="Notre emplacement" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            width="300" height="450" allowfullscreen="" loading="lazy" title="Our Location" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </main>
@@ -55,19 +57,31 @@
 import { ref } from 'vue';
 
 const products = ref([
-  { name: 'Chocofolie', image: 'src/assets/Chocofolie.jpg', description: 'Plongez dans l\'univers de la Chocofolie avec notre gâteau éponyme. Chaque tranche est un voyage gustatif exaltant, où le chocolat règne en maître absolu. Ce gâteau irrésistible est une symphonie de textures et de saveurs, avec des couches de génoise chocolatée, une ganache onctueuse et des éclats de chocolat croquant pour une expérience sensorielle inégalée. Laissez-vous envoûter par cette folie chocolatée, parfaite pour satisfaire vos désirs sucrés les plus fous.' },
-  { name: 'Jack blanc', image: 'src/assets/Jack blanc.jpg', description: 'Découvrez notre pain Jack Blanc, une expérience de boulangerie qui vous transportera dans un monde de saveurs délicates et de texture exquise. Chaque tranche révèle un équilibre parfait entre la douceur de la mie et la légère croustillance de la croûte, créant une harmonie en bouche incomparable. Confectionné avec soin à partir des meilleurs ingrédients, ce pain est un hommage à la tradition et au savoir-faire artisanal.' },
-  { name: 'Croissant aux amandes', image: 'src/assets/Croissant aux amandes.jpg', description: 'Dégustez notre délicieux croissant aux amandes, une collation exquise qui allie la légèreté du croissant feuilleté à la richesse des amandes caramélisées. Chaque bouchée est une symphonie de textures, avec des couches croustillantes de pâte feuilletée enveloppant un cœur fondant et généreusement garni d\'une crème d\'amande onctueuse. Laissez-vous séduire par l\'arôme envoûtant des amandes grillées et le délice sucré qui se fond dans votre palais à chaque instant. Parfait pour accompagner votre pause-café ou pour une indulgence gourmande à tout moment de la journée.' }
+  { 
+    name: 'Chocofolie', 
+    image: 'src/assets/Chocofolie.jpg', 
+    description: 'Dive into the world of Chocofolie with our eponymous cake. Each slice is an exhilarating taste journey where chocolate rules supreme. This irresistible cake is a symphony of textures and flavors, with layers of chocolate sponge, smooth ganache, and crunchy chocolate shards for an unparalleled sensory experience. Let yourself be enchanted by this chocolate madness, perfect for satisfying your wildest sweet cravings.' 
+  },
+  { 
+    name: 'Jack blanc', 
+    image: 'src/assets/Jack blanc.jpg', 
+    description: 'Discover our Jack Blanc bread, a bakery experience that will transport you to a world of delicate flavors and exquisite texture. Each slice reveals a perfect balance between the softness of the crumb and the slight crunchiness of the crust, creating an incomparable harmony in the mouth. Carefully made from the finest ingredients, this bread is a tribute to tradition and artisanal craftsmanship.' 
+  },
+  { 
+    name: 'Croissant aux amandes', 
+    image: 'src/assets/Croissant aux amandes.jpg', 
+    description: 'Taste our delicious almond croissant, an exquisite snack that combines the lightness of flaky croissant pastry with the richness of caramelized almonds. Each bite is a symphony of textures, with crispy layers of pastry enveloping a melting heart generously filled with smooth almond cream. Be seduced by the enchanting aroma of toasted almonds and the sweet delight that melts on your palate with each bite. Perfect for accompanying your coffee break or for a gourmet indulgence at any time of the day.' 
+  }
 ]);
 
 const hours = ref([
-  { day: 'Lundi', time: '8h-18h' },
-  { day: 'Mardi', time: '8h-18h' },
-  { day: 'Mercredi', time: '8h-18h' },
-  { day: 'Jeudi', time: '8h-18h' },
-  { day: 'Vendredi', time: '8h-18h' },
-  { day: 'Samedi', time: '10h-17h' },
-  { day: 'Dimanche', time: '10h-17h' }
+  { day: 'Monday', time: '8h-18h' },
+  { day: 'Tuesday', time: '8h-18h' },
+  { day: 'Wednesday', time: '8h-18h' },
+  { day: 'Thursday', time: '8h-18h' },
+  { day: 'Friday', time: '8h-18h' },
+  { day: 'Saturday', time: '10h-17h' },
+  { day: 'Sunday', time: '10h-17h' }
 ]);
 
 function handleMouseOver(event) {
@@ -247,7 +261,7 @@ div.bienvenue div {
 .intro_info li {
     text-align: left;
     font-family: Cookie;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     color: rgb(26, 17, 0);
     padding: 5px;

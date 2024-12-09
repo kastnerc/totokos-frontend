@@ -120,9 +120,9 @@ watch(() => route.query.category_id, async (newCategoryId) => {
   if (newCategoryId) {
     const results = await getProductsByCategory(newCategoryId);
     products.value = results;
-    searchQuery.value = newCategoryId; // Set the search query to category ID
+    searchQuery.value = newCategoryId;
   }
-}, { immediate: true }); // Trigger immediately on initial load if `category_id` is present
+}, { immediate: true });
 
 // Function to handle search by ID
 const searchById = async () => {
@@ -155,7 +155,7 @@ const searchByCategory = async () => {
     const results = await getProductsByCategory(id);
     if (results.length > 0) {
       products.value = results;
-      searchResult.value = null; // Clear product search
+      searchResult.value = null;
     } else {
       alert("No products found for this category");
       products.value = [];

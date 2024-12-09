@@ -55,7 +55,7 @@ const fetchProducts = async () => {
 };
 
 const searchProducts = () => {
-  currentPage.value = 1; // Reset to the first page for a new search
+  currentPage.value = 1;
   fetchProducts();
 };
 

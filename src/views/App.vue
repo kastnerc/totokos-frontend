@@ -124,7 +124,6 @@ const closeMenu = () => {
 </template>
 
 <style>
-/* Make sure the body and html occupy full height */
 html, body {
   height: 100%;
   margin: 0;
@@ -133,19 +132,19 @@ html, body {
 #page-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ensure it fills at least the viewport height */
+  min-height: 100vh;
   background-color: #edece6;
 }
 
 header, .content, footer {
-  flex-shrink: 0; /* Prevent flex items from being smaller than their content */
+  flex-shrink: 0;
 }
 
 .content {
-  flex-grow: 1; /* Allows the content area to expand and fill the available space */
+  flex-grow: 1;
 }
 
 footer {
-  text-align: center; /* Center align the text */
+  text-align: center;
 }
 </style>

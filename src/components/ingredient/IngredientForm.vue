@@ -76,6 +76,49 @@ const getIngredient = async (id) => {
 };
 
 const handleSubmit = async () => {
+  // Define regex patterns
+  const numericRegex = /^[0-9]+$/;
+  const nameRegex = /^[A-Za-z\s]+$/;
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  const priceRegex = /^[0-9]+(\.[0-9]{1,2})?$/; 
+  const measureRegex = /^[A-Za-z\s]+$/; 
+
+  // Validate id_supplier (required numeric)
+  if (!numericRegex.test(ingredient.value.id_supplier)) {
+    alert("Supplier ID must be numeric.");
+    return;
+  }
+
+  // Validate ingredient_name (letters and spaces only)
+  if (!nameRegex.test(ingredient.value.ingredient_name)) {
+    alert("Ingredient name must contain only letters and spaces.");
+    return;
+  }
+
+  // Validate stock (required numeric)
+  if (!numericRegex.test(ingredient.value.stock)) {
+    alert("Stock must be a numeric value.");
+    return;
+  }
+
+  // Validate expiry_date (required, format yyyy-mm-dd)
+  if (!dateRegex.test(ingredient.value.expiry_date)) {
+    alert("Expiry date must be in YYYY-MM-DD format.");
+    return;
+  }
+
+  // Validate price_per_unit (required, numeric with optional decimals)
+  if (!priceRegex.test(ingredient.value.price_per_unit)) {
+    alert("Price per Unit must be a valid number, optionally with up to two decimal places.");
+    return;
+  }
+
+  // Validate unit_measure (required, letters and spaces)
+  if (!measureRegex.test(ingredient.value.unit_measure)) {
+    alert("Unit measure must contain only letters and spaces.");
+    return;
+  }
+
   try {
     if (ingredient.value.id_ingredient) {
       await axios.patch(`http://localhost:5000/api/ingredient/${ingredient.value.id_ingredient}`, ingredient.value);

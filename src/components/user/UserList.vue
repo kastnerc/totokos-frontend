@@ -1,11 +1,13 @@
 <template>
   <main class="user-list-container">
     <h1>User List</h1>
+    <!-- Search Bar -->
     <div class="search-bar">
       <input v-model="searchQuery" placeholder="Search by User ID" class="search-input" />
       <button @click="searchById" class="btn btn-green">Search</button>
       <button @click="resetSearch" class="btn btn-red">Reset</button>
     </div>
+    <!-- Responsive Table for User Data -->
     <div class="table-responsive">
       <table class="table">
         <thead>
@@ -28,6 +30,7 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Iterate through Users or Search Result -->
           <tr v-for="user in Users" :key="user.id_user">
             <td>{{ user.id_user }}</td>
             <td>{{ user.username }}</td>
@@ -43,6 +46,7 @@
             <td>{{ user.country }}</td>
             <td>{{ user.postal_code }}</td>
             <td><img :src="user.image" alt="User Image" class="user-image" /></td>
+            <!-- Action Buttons -->
             <td class="actions">
               <button @click="goToUpdate(user.id_user)" class="btn btn-blue">Update</button>
               <button @click="goToOrders(user.id_user)" class="btn btn-green">View Orders</button>
@@ -60,11 +64,13 @@ import { onBeforeMount, ref, computed } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
-const users = ref([]);
-const searchQuery = ref("");
-const searchResult = ref(null);
+// Reactive properties for user data and search functionality
+const users = ref([]); // List of all users
+const searchQuery = ref(""); // User input for search
+const searchResult = ref(null); // Result of user search by ID
 const router = useRouter();
 
+// Fetch all users from the API
 const getUsers = async () => {
   try {
     const response = await axios.get("http://localhost:5000/api/user/");
@@ -74,12 +80,14 @@ const getUsers = async () => {
   }
 };
 
+// Delete a user by ID
 const deleteUser = async (id) => {
   try {
     await axios.delete(`http://localhost:5000/api/user/${id}`);
+    // Remove the deleted user from the local list
     users.value = users.value.filter((user) => user.id_user !== id);
     if (searchResult.value?.id_user === id) {
-      searchResult.value = null;
+      searchResult.value = null; // Clear search result if the user was deleted
     }
     alert("User deleted successfully");
   } catch (error) {
@@ -87,6 +95,7 @@ const deleteUser = async (id) => {
   }
 };
 
+// Fetch a specific user by their ID
 const getUserById = async (id) => {
   try {
     const response = await axios.get(`http://localhost:5000/api/user/${id}`);
@@ -97,6 +106,7 @@ const getUserById = async (id) => {
   }
 };
 
+// Search for a user by ID
 const searchById = async () => {
   if (searchQuery.value) {
     const id = parseInt(searchQuery.value, 10);
@@ -105,35 +115,41 @@ const searchById = async () => {
       return;
     }
     const result = await getUserById(id);
-    searchResult.value = result || null;
+    searchResult.value = result || null; // Set search result or clear if not found
     if (!result) alert("User not found");
   } else {
     resetSearch();
   }
 };
 
+// Reset search query and fetch all users
 const resetSearch = () => {
   searchQuery.value = "";
   searchResult.value = null;
   getUsers();
 };
 
+// Computed property to display either the search result or the full list
 const Users = computed(() => {
   return searchResult.value ? [searchResult.value] : users.value;
 });
 
+// Navigate to the update form for a specific user
 const goToUpdate = (id) => {
   router.push({ name: "UserForm", params: { id } });
 };
 
+// Navigate to the order list for a specific user
 const goToOrders = (userId) => {
   router.push({ name: "OrderList", query: { userId } });
 };
 
+// Fetch users when the component is mounted
 onBeforeMount(getUsers);
 </script>
 
 <style scoped>
+/* Styling for the container and components */
 .user-list-container {
   max-width: 1200px;
   margin: 20px auto;
@@ -144,6 +160,7 @@ onBeforeMount(getUsers);
   font-family: Arial, sans-serif;
 }
 
+/* Styles for search bar */
 .search-bar {
   display: flex;
   gap: 10px;
@@ -158,13 +175,14 @@ onBeforeMount(getUsers);
   flex: 1;
 }
 
+/* Table styles */
 .table-responsive {
   overflow-x: auto;
 }
 
 .table {
   width: 100%;
-  min-width: 1500px; /* Adjust this value based on your content needs */
+  min-width: 1500px;
   border-collapse: collapse;
   margin-top: 20px;
 }
@@ -180,12 +198,14 @@ onBeforeMount(getUsers);
   background-color: #f4f4f4;
 }
 
+/* Image styling */
 .user-image {
   width: 50px;
   height: auto;
   border-radius: 4px;
 }
 
+/* Styles for action buttons */
 .actions {
   display: flex;
   gap: 5px;
@@ -226,29 +246,31 @@ onBeforeMount(getUsers);
 .btn-red:hover {
   background-color: #c82333;
 }
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .search-bar {
-    flex-direction: column; 
+    flex-direction: column;
     align-items: stretch;
-    gap: 8px; 
+    gap: 8px;
   }
 
   .search-input {
-    width: 100%; 
-    margin-bottom: 5px; 
+    width: 100%;
+    margin-bottom: 5px;
   }
 
   .btn {
-    width: 100%; 
-    margin-bottom: 5px; 
+    width: 100%;
+    margin-bottom: 5px;
   }
 }
 
 @media (max-width: 480px) {
   .btn {
     font-size: 12px;
-    padding: 8px; 
-    margin-bottom: 5px; 
+    padding: 8px;
+    margin-bottom: 5px;
   }
 
   .search-input {

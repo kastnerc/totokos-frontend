@@ -54,10 +54,10 @@ import { useRoute } from "vue-router";
 
 export default {
   setup() {
-    const productId = ref(""); // Input field value
-    const priceHistories = ref([]); // Array to store the fetched price histories
-    const error = ref(null); // Error message if any
-    const loading = ref(false); // Loading state
+    const productId = ref("");
+    const priceHistories = ref([]);
+    const error = ref(null);
+    const loading = ref(false);
 
     const route = useRoute();
 
@@ -79,10 +79,10 @@ export default {
     };
 
     onMounted(() => {
-      const idFromRoute = route.query.id_product; // Fetch id_product from query parameters
+      const idFromRoute = route.query.id_product;
       if (idFromRoute) {
         productId.value = idFromRoute;
-        fetchPriceHistory(); // Automatically fetch price history
+        fetchPriceHistory();
       }
     });
 

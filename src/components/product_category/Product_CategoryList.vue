@@ -83,8 +83,8 @@ const searchById = async () => {
     if (!isNaN(id)) {
       const result = await axios.get(`http://localhost:5000/api/product_category/${id}`);
       if (result.data) {
-        product_categories.value = [result.data]; // Display only the searched category
-        totalPages.value = 1; // Reset to 1 since only one item is displayed
+        product_categories.value = [result.data];
+        totalPages.value = 1;
       } else {
         alert("Product category not found");
       }

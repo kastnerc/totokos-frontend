@@ -23,7 +23,7 @@
           <input v-model="order.status" type="text" id="status" placeholder="Enter the order status" :required="!!order.id_order" />
         </div>
 
-        <div class="form-group">
+        <div class="form-group" v-if="!order.id_order">
           <label for="products">Select Products</label>
           <select v-model="selectedProductIds" multiple>
             <option v-for="product in products" :key="product.id_product" :value="product.id_product">
@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
 
@@ -74,6 +74,51 @@ const fetchProducts = async () => {
 };
 
 const handleSubmit = async () => {
+  // Regex validations
+  const userIdRegex = /^[0-9]+$/;
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  const statusRegex = /^[A-Za-z\s]*$/; // Allow letters and spaces, empty allowed if not updating
+  const quantityRegex = /^[0-9]+$/;
+
+  // Validate user ID
+  if (!userIdRegex.test(order.value.id_user)) {
+    alert("User ID must be numeric.");
+    return;
+  }
+
+  // Validate pickup_date if provided
+  if (order.value.pickup_date && !dateRegex.test(order.value.pickup_date)) {
+    alert("Pickup date must be in YYYY-MM-DD format.");
+    return;
+  }
+
+  // If we are updating (id_order present), status is required
+  if (order.value.id_order && !order.value.status) {
+    alert("Status is required when updating an order.");
+    return;
+  }
+
+  // Validate status if provided
+  if (order.value.status && !statusRegex.test(order.value.status)) {
+    alert("Status must contain only letters and spaces.");
+    return;
+  }
+
+  // If we are adding a new order, we must have selected products
+  if (!order.value.id_order && selectedProductIds.value.length === 0) {
+    alert("Please select at least one product.");
+    return;
+  }
+
+  // Validate product quantities
+  for (const id of selectedProductIds.value) {
+    const product = products.value.find(p => p.id_product === id);
+    if (!quantityRegex.test(String(product.quantity)) || product.quantity < 1) {
+      alert(`Quantity for product ${findProductName(id)} must be a positive number.`);
+      return;
+    }
+  }
+
   const productsWithQuantities = selectedProductIds.value.map(id => {
     const product = products.value.find(p => p.id_product === id);
     return {
@@ -85,19 +130,21 @@ const handleSubmit = async () => {
   const orderDetails = {
     id_user: order.value.id_user,
     pickup_date: order.value.pickup_date ? order.value.pickup_date : null,
-    status: order.value.status, // Default status if not provided
+    status: order.value.status,
     products: productsWithQuantities
   };
 
-  // Prepare the payload according to the operation
-  const payload = order.value.id_order ? orderDetails : [orderDetails]; // Wrap in an array if adding
-
-  console.log("Final payload being sent:", JSON.stringify(payload));
-
-  if (!orderDetails.id_user || !orderDetails.products.length) {
-    return alert("Please ensure all required fields are filled correctly.");
+  // Additional required checks before sending
+  if (!orderDetails.id_user) {
+    alert("User ID is required.");
+    return;
+  }
+  if (!order.value.id_order && (!orderDetails.products || !orderDetails.products.length)) {
+    alert("Please select at least one product when adding an order.");
+    return;
   }
 
+  const payload = order.value.id_order ? orderDetails : [orderDetails]; 
   const endpoint = order.value.id_order ? `http://localhost:5000/api/order/${order.value.id_order}` : "http://localhost:5000/api/order";
   const method = order.value.id_order ? 'patch' : 'post';
 
