@@ -1,8 +1,6 @@
 # Totoko's Frontend - Third Summative Assignment  
 ### Created and published by Caleb Kastner, Georgio El-Khoury, and Tristan Bastien  
 
-![Totoko's Temptations Logo Website](https://github.com/calebk5/Web-Client/assets/145488814/710a1527-cb2e-4786-8a07-6891eaf5912f)  
-
 ## Introduction  
 The following project was created by the same team that developed _Totoko's Temptations_ last semester, and an earlier project based on the same concept. The team consists of Caleb Kastner, the project manager; Georgio El-Khoury, the driver of the project; and Tristan Bastien, the lead creative developer. The three decided to take the same bakery as _Totoko's Temptations_ and create a backend database just as their teacher had asked. From then on, they added the frontend CSS and Vue that the teacher had asked them to implement as their final assignment this semester for the class.  
 
